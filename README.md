@@ -121,3 +121,36 @@ public class IntegralAproximada {
 
 4. **Funciones auxiliares**:
    - `getLugar(int index)`: Devuelve el nombre del lugar en función del índice.
+
+     ### Explicación del Código:
+
+1. **Variables**:
+   - `posiciones`: Arreglo para almacenar las posiciones de los niños.
+   - `intentos`: Contador de los intentos del usuario.
+   - `encontrados`: Contador de los niños encontrados.
+   - `maxIntentos`: Número máximo de intentos permitidos.
+
+2. **Inicializar posiciones**:
+   - Tres niños se esconden en posiciones aleatorias distintas.
+
+3. **Bucle de juego**:
+   - El usuario busca en una posición ingresada por consola.
+   - Si hay un niño en esa posición, hay un 10% de probabilidades de que no sea encontrado.
+   - Se actualizan los contadores de intentos y niños encontrados.
+   - El juego termina cuando el usuario ha encontrado a los tres niños o ha agotado los intentos.
+
+4. **Funciones auxiliares**:
+   - `getLugar(int index)`: Devuelve el nombre del lugar en función del índice.
+
+### Código Modificado (Preguntas 4 y 5:)
+
+### Explicación de las Modificaciones:
+
+1. **Impedir que dos niños se escondan en el mismo sitio**:
+   - Se ha modificado el bucle de inicialización para que no haya posiciones duplicadas al esconder a los niños.
+
+2. **Agregar probabilidad de que un niño delate su posición antes de cada turno par**:
+   - Se ha añadido el método `delatarPosicion` que verifica si un niño hace un ruido (5% de probabilidad) antes de cada turno par.
+
+3. **Permitir que los niños cambien su ubicación en el turno 7 (30% de probabilidad)**:
+   - Se ha añadido el método `intercambiarUbicacion` que cambia la ubicación de dos niños aleatoriamente en el turno 7 con una probabilidad del 30%.
