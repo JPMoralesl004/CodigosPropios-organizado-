@@ -1,4 +1,4 @@
-### Aqui pondre las explicaciones a todas las soluciones que haga de los problemas del parcial.
+### Aqui estan mis explicaciones de los codigos de las preguntas 2 a la 7 del parcial de progra 1.
 
 ### Pregunta 2:
 
