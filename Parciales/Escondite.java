@@ -93,14 +93,7 @@ public class Escondite {
     }
 
     private static String getLugar(int index) {
-        switch (index) {
-            case 0: return "Árbol";
-            case 1: return "Banco";
-            case 2: return "Arbusto";
-            case 3: return "Columpio";
-            case 4: return "Caseta";
-            case 5: return "Tobogán";
-            default: return "";
-        }
+        String[] lugares = {"Árbol", "Banco", "Arbusto", "Columpio", "Caseta", "Tobogán"};
+        return lugares[index];
     }
 }
