@@ -21,6 +21,7 @@ public class IntegralAproximada {
                 } else {
                     datosValidos = true;
                 }
+
             } while (!datosValidos);
 
             int n = 1000;
