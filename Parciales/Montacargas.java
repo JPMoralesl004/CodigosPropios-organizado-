@@ -1,57 +1,111 @@
+import java.util.Random;
 import java.util.Scanner;
 
-public class Montacargas {
+public class Escondite {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        int plantaActual = 0;
-        boolean continuar = true;
+        Random random = new Random();
 
-        while (continuar) {
-            mostrarPlanta(plantaActual);
-            System.out.println("Elige una planta de destino (0-9): ");
-            int plantaDestino = scanner.nextInt();
+        int[] posiciones = new int[6];
+        boolean[] nervioso = new boolean[3];
+        int intentos = 0;
+        int encontrados = 0;
+        int maxIntentos = 12;
+        int turnoCambio = 7;
+        double cargaTotal = 0.0;
 
-            while (plantaDestino < 0 || plantaDestino > 9) {
-                System.out.println("Planta inválida. Elige una planta entre 0 y 9: ");
-                plantaDestino = scanner.nextInt();
-            }
-
-            if (plantaDestino != plantaActual) {
-                moverMontacargas(plantaActual, plantaDestino);
-                plantaActual = plantaDestino;
-            }
-
-            System.out.println("¿Quieres hacer otro viaje? (sí (S) / no (N)): ");
-            String respuesta = scanner.next();
-            continuar = respuesta.equalsIgnoreCase("S");
+        for (int i = 0; i < 3; i++) {
+            int posicion;
+            do {
+                posicion = random.nextInt(6);
+            } while (posiciones[posicion] != 0);
+            posiciones[posicion] = i + 1;
         }
 
-        System.out.println("Simulación terminada.");
+        System.out.println("¡Los niños se han escondido!");
+        System.out.println("1-Árbol 2-Banco 3-Arbusto 4-Columpio 5-Caseta 6-Tobogán");
+
+        while (intentos < maxIntentos && encontrados < 3) {
+            if (intentos % 2 == 0) {
+                delatarPosicion(random, nervioso, posiciones);
+            }
+            if (intentos == turnoCambio) {
+                intercambiarUbicacion(random, posiciones);
+            }
+
+            System.out.print("¿Dónde quieres buscar? ");
+            int busqueda = scanner.nextInt() - 1;
+            intentos++;
+
+            if (posiciones[busqueda] != 0) {
+                double chance = random.nextDouble();
+                if (chance > 0.1) {
+                    double carga = 30 + (75 - 30) * random.nextDouble();
+                    cargaTotal += carga;
+                    System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡Has encontrado al niño " + posiciones[busqueda] + "! Carga transportada: " + carga + " kilos.");
+                    encontrados++;
+                    posiciones[busqueda] = 0;
+                } else {
+                    System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡No hay nadie!");
+                }
+            } else {
+                System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡No hay nadie!");
+            }
+
+            System.out.println("Llevas " + intentos + " intento(s) y has encontrado " + encontrados + " niño(s).");
+            System.out.println("Carga total transportada: " + cargaTotal + " kilos.");
+        }
+
+        if (encontrados == 3) {
+            System.out.println("¡Has encontrado a todos los niños!");
+        } else {
+            System.out.println("¡Se acabaron los intentos! No has encontrado a todos los niños.");
+        }
+
+        System.out.println("Carga total transportada durante la simulación: " + cargaTotal + " kilos.");
         scanner.close();
     }
 
-    private static void mostrarPlanta(int planta) {
-        for (int i = 9; i >= 0; i--) {
-            if (i == planta) {
-                System.out.println(i + "  [ --- ]");
+    private static void delatarPosicion(Random random, boolean[] nervioso, int[] posiciones) {
+        for (int i = 0; i < nervioso.length; i++) {
+            double chance = random.nextDouble();
+            if (chance <= 0.05) {
+                nervioso[i] = true;
+                System.out.println("El niño " + (i + 1) + " ha hecho un ruido en la posición " + getLugar(posiciones[i] - 1) + "!");
             } else {
-                System.out.println(i + "  |   |");
+                nervioso[i] = false;
             }
         }
-        System.out.println("----------------");
     }
 
-    private static void moverMontacargas(int origen, int destino) {
-        if (origen < destino) {
-            System.out.println("Subiendo de la planta " + origen + " a la planta " + destino + "...");
-        } else {
-            System.out.println("Bajando de la planta " + origen + " a la planta " + destino + "...");
+    private static void intercambiarUbicacion(Random random, int[] posiciones) {
+        double chance = random.nextDouble();
+        if (chance <= 0.3) {
+            int primeraPos, segundaPos;
+            do {
+                primeraPos = random.nextInt(6);
+            } while (posiciones[primeraPos] == 0);
+            do {
+                segundaPos = random.nextInt(6);
+            } while (posiciones[segundaPos] == 0 || primeraPos == segundaPos);
+
+            int temp = posiciones[primeraPos];
+            posiciones[primeraPos] = posiciones[segundaPos];
+            posiciones[segundaPos] = temp;
+
+            System.out.println("Los niños se han intercambiado de posición sigilosamente.");
         }
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+    }
+
+    private static String getLugar(int index) {
+        switch (index) {
+            case 0: return "Árbol";
+            case 1: return "Banco";
+            case 2: return "Arbusto";
+            case 3: return "Columpio";
+            case 4: return "Caseta";
+            case 5: return "Tobogán";
+            default: return "";
         }
-        System.out.println("El montacargas ha llegado a la planta " + destino + ".");
     }
 }
