@@ -17,6 +17,7 @@ public class Escondite {
             int posicion;
             do {
                 posicion = random.nextInt(6);
+
             } while (posiciones[posicion] != 0);
             posiciones[posicion] = i + 1;
         }
@@ -25,9 +26,11 @@ public class Escondite {
         System.out.println("1-Árbol 2-Banco 3-Arbusto 4-Columpio 5-Caseta 6-Tobogán");
 
         while (intentos < maxIntentos && encontrados < 3) {
+
             if (intentos % 2 == 0) {
                 delatarPosicion(random, nervioso, posiciones);
             }
+
             if (intentos == turnoCambio) {
                 intercambiarUbicacion(random, posiciones);
             }
@@ -38,13 +41,16 @@ public class Escondite {
 
             if (posiciones[busqueda] != 0) {
                 double chance = random.nextDouble();
+
                 if (chance > 0.1) {
                     System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡Has encontrado al niño " + posiciones[busqueda] + "!");
                     encontrados++;
                     posiciones[busqueda] = 0;
+
                 } else {
                     System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡No hay nadie!");
                 }
+
             } else {
                 System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡No hay nadie!");
             }
@@ -54,6 +60,7 @@ public class Escondite {
 
         if (encontrados == 3) {
             System.out.println("¡Has encontrado a todos los niños!");
+
         } else {
             System.out.println("¡Se acabaron los intentos! No has encontrado a todos los niños.");
         }
@@ -62,11 +69,14 @@ public class Escondite {
     }
 
     private static void delatarPosicion(Random random, boolean[] nervioso, int[] posiciones) {
+
         for (int i = 0; i < nervioso.length; i++) {
             double chance = random.nextDouble();
+
             if (chance <= 0.05) {
                 nervioso[i] = true;
                 System.out.println("El niño " + (i + 1) + " ha hecho un ruido en la posición " + getLugar(posiciones[i] - 1) + "!");
+
             } else {
                 nervioso[i] = false;
             }
@@ -75,13 +85,18 @@ public class Escondite {
 
     private static void intercambiarUbicacion(Random random, int[] posiciones) {
         double chance = random.nextDouble();
+
         if (chance <= 0.3) {
             int primeraPos, segundaPos;
+
             do {
                 primeraPos = random.nextInt(6);
+
             } while (posiciones[primeraPos] == 0);
+
             do {
                 segundaPos = random.nextInt(6);
+                
             } while (posiciones[segundaPos] == 0 || primeraPos == segundaPos);
 
             int temp = posiciones[primeraPos];
@@ -93,7 +108,14 @@ public class Escondite {
     }
 
     private static String getLugar(int index) {
-        String[] lugares = {"Árbol", "Banco", "Arbusto", "Columpio", "Caseta", "Tobogán"};
-        return lugares[index];
+        switch (index) {
+            case 0: return "Árbol";
+            case 1: return "Banco";
+            case 2: return "Arbusto";
+            case 3: return "Columpio";
+            case 4: return "Caseta";
+            case 5: return "Tobogán";
+            default: return "";
+        }
     }
 }
