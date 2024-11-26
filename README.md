@@ -154,3 +154,25 @@ public class IntegralAproximada {
 
 3. **Permitir que los niños cambien su ubicación en el turno 7 (30% de probabilidad)**:
    - Se ha añadido el método `intercambiarUbicacion` que cambia la ubicación de dos niños aleatoriamente en el turno 7 con una probabilidad del 30%.
+
+### Pregunta 6:
+
+### Explicación del Código
+
+1. **Entrada del Usuario y Control del Flujo**:
+   - El programa inicia con el montacargas en la planta 0.
+   - Se solicita al usuario que ingrese una planta de destino.
+   - Se valida que la planta de destino esté entre 0 y 9.
+
+2. **Mostrar la Planta Actual**:
+   - La función `mostrarPlanta` muestra la planta actual del montacargas de manera visual.
+   - Se imprime un diagrama del edificio mostrando la ubicación del montacargas.
+
+3. **Mover el Montacargas**:
+   - La función `moverMontacargas` simula el movimiento del montacargas entre la planta de origen y la planta de destino.
+   - Se imprime si el montacargas está subiendo o bajando.
+   - Se simula una pausa (opcional) para representar el movimiento del montacargas.
+
+4. **Repetir la Operación**:
+   - Después de cada viaje, se pregunta al usuario si desea hacer otro viaje.
+   - El bucle continúa hasta que el usuario decida terminar la simulación.
