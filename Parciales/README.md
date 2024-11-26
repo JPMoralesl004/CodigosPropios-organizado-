@@ -101,59 +101,169 @@ public class IntegralAproximada {
 - Muestra un mensaje de agradecimiento y cierra el objeto `Scanner`.
 - `calcularFuncion`: Método que define la función a integrar. Calcula y devuelve el valor de la función para un valor dado de `x`.
 
-### Pregunta 3:
+### Preguntas 3, 4 y 5:
 
-### Explicación del Código:
-1. **Variables**:
-   - `posiciones`: Arreglo para almacenar las posiciones de los niños.
-   - `intentos`: Contador de los intentos del usuario.
-   - `encontrados`: Contador de los niños encontrados.
-   - `maxIntentos`: Número máximo de intentos permitidos.
+### Código Explicado: `Escondite.java`
 
-2. **Inicializar posiciones**:
-   - Tres niños se esconden en posiciones aleatorias distintas.
+Este programa en Java simula un juego de escondite. Tres niños se esconden en ubicaciones aleatorias, y el jugador debe encontrarlos en un máximo de 12 intentos.
 
-3. **Bucle de juego**:
-   - El usuario busca en una posición ingresada por consola.
-   - Si hay un niño en esa posición, hay un 10% de probabilidades de que no sea encontrado.
-   - Se actualizan los contadores de intentos y niños encontrados.
-   - El juego termina cuando el usuario ha encontrado a los tres niños o ha agotado los intentos.
+#### Importaciones
+```java
+import java.util.Random;
+import java.util.Scanner;
+```
+- Se importan las clases `Random` y `Scanner` para generar números aleatorios y leer la entrada del usuario desde la consola.
 
-4. **Funciones auxiliares**:
-   - `getLugar(int index)`: Devuelve el nombre del lugar en función del índice.
+#### Clase Principal
+```java
+public class Escondite {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+```
+- `public class Escondite`: Define una clase pública llamada `Escondite`.
+- `public static void main(String[] args)`: Define el método principal que ejecuta el programa.
 
-     ### Explicación del Código:
+#### Declaraciones Iniciales
+```java
+        int[] posiciones = new int[6];
+        boolean[] nervioso = new boolean[3];
+        int intentos = 0;
+        int encontrados = 0;
+        int maxIntentos = 12;
+        int turnoCambio = 7;
+```
+- `int[] posiciones`: Arreglo que almacena las posiciones de los niños.
+- `boolean[] nervioso`: Arreglo para controlar si los niños se ponen nerviosos.
+- Variables para contar los intentos, los niños encontrados, el máximo de intentos permitidos y el turno en el que pueden cambiar de ubicación.
 
-1. **Variables**:
-   - `posiciones`: Arreglo para almacenar las posiciones de los niños.
-   - `intentos`: Contador de los intentos del usuario.
-   - `encontrados`: Contador de los niños encontrados.
-   - `maxIntentos`: Número máximo de intentos permitidos.
+#### Inicialización de Posiciones
+```java
+        for (int i = 0; i < 3; i++) {
+            int posicion;
+            do {
+                posicion = random.nextInt(6);
+            } while (posiciones[posicion] != 0);
+            posiciones[posicion] = i + 1;
+        }
+```
+- Se esconden tres niños en posiciones aleatorias distintas en un arreglo de 6 posibles ubicaciones.
 
-2. **Inicializar posiciones**:
-   - Tres niños se esconden en posiciones aleatorias distintas.
+#### Mensajes de Inicio
+```java
+        System.out.println("¡Los niños se han escondido!");
+        System.out.println("1-Árbol 2-Banco 3-Arbusto 4-Columpio 5-Caseta 6-Tobogán");
+```
+- Mensajes iniciales para indicar que los niños se han escondido y mostrar las posibles ubicaciones.
 
-3. **Bucle de juego**:
-   - El usuario busca en una posición ingresada por consola.
-   - Si hay un niño en esa posición, hay un 10% de probabilidades de que no sea encontrado.
-   - Se actualizan los contadores de intentos y niños encontrados.
-   - El juego termina cuando el usuario ha encontrado a los tres niños o ha agotado los intentos.
+#### Bucle Principal del Juego
+```java
+        while (intentos < maxIntentos && encontrados < 3) {
+            if (intentos % 2 == 0) {
+                delatarPosicion(random, nervioso, posiciones);
+            }
+            if (intentos == turnoCambio) {
+                intercambiarUbicacion(random, posiciones);
+            }
+```
+- Bucle `while` que se ejecuta mientras el jugador tenga intentos disponibles y no haya encontrado a los tres niños.
+- Cada dos turnos, se verifica si un niño hace un ruido (`delatarPosicion`).
+- En el turno 7, los niños pueden cambiar de ubicación (`intercambiarUbicacion`).
 
-4. **Funciones auxiliares**:
-   - `getLugar(int index)`: Devuelve el nombre del lugar en función del índice.
+#### Entrada del Usuario y Búsqueda
+```java
+            System.out.print("¿Dónde quieres buscar? ");
+            int busqueda = scanner.nextInt() - 1;
+            intentos++;
+```
+- Se pide al usuario que ingrese una posición para buscar a los niños.
+- Se incrementa el contador de intentos.
 
-### Código Modificado (Preguntas 4 y 5:)
+#### Verificación de la Búsqueda
+```java
+            if (posiciones[busqueda] != 0) {
+                double chance = random.nextDouble();
+                if (chance > 0.1) {
+                    System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡Has encontrado al niño " + posiciones[busqueda] + "!");
+                    encontrados++;
+                    posiciones[busqueda] = 0;
+                } else {
+                    System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡No hay nadie!");
+                }
+            } else {
+                System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡No hay nadie!");
+            }
 
-### Explicación de las Modificaciones:
+            System.out.println("Llevas " + intentos + " intento(s) y has encontrado " + encontrados + " niño(s).");
+        }
+```
+- Se verifica si el niño está en la posición buscada.
+- Si el niño está en la posición y no se oculta nuevamente, se incrementa el contador de niños encontrados y se vacía la posición.
+- Se imprime el estado actual del juego después de cada búsqueda.
 
-1. **Impedir que dos niños se escondan en el mismo sitio**:
-   - Se ha modificado el bucle de inicialización para que no haya posiciones duplicadas al esconder a los niños.
+#### Fin del Juego
+```java
+        if (encontrados == 3) {
+            System.out.println("¡Has encontrado a todos los niños!");
+        } else {
+            System.out.println("¡Se acabaron los intentos! No has encontrado a todos los niños.");
+        }
 
-2. **Agregar probabilidad de que un niño delate su posición antes de cada turno par**:
-   - Se ha añadido el método `delatarPosicion` que verifica si un niño hace un ruido (5% de probabilidad) antes de cada turno par.
+        scanner.close();
+    }
+```
+- Mensajes de fin del juego según si el jugador encontró a los tres niños o agotó los intentos.
+- Se cierra el objeto `Scanner`.
 
-3. **Permitir que los niños cambien su ubicación en el turno 7 (30% de probabilidad)**:
-   - Se ha añadido el método `intercambiarUbicacion` que cambia la ubicación de dos niños aleatoriamente en el turno 7 con una probabilidad del 30%.
+#### Métodos Auxiliares
+##### delatarPosicion
+```java
+    private static void delatarPosicion(Random random, boolean[] nervioso, int[] posiciones) {
+        for (int i = 0; i < nervioso.length; i++) {
+            double chance = random.nextDouble();
+            if (chance <= 0.05) {
+                nervioso[i] = true;
+                System.out.println("El niño " + (i + 1) + " ha hecho un ruido en la posición " + getLugar(posiciones[i] - 1) + "!");
+            } else {
+                nervioso[i] = false;
+            }
+        }
+    }
+```
+- Método que verifica si un niño hace un ruido con una probabilidad del 5%.
+
+##### intercambiarUbicacion
+```java
+    private static void intercambiarUbicacion(Random random, int[] posiciones) {
+        double chance = random.nextDouble();
+        if (chance <= 0.3) {
+            int primeraPos, segundaPos;
+            do {
+                primeraPos = random.nextInt(6);
+            } while (posiciones[primeraPos] == 0);
+            do {
+                segundaPos = random.nextInt(6);
+            } while (posiciones[segundaPos] == 0 || primeraPos == segundaPos);
+
+            int temp = posiciones[primeraPos];
+            posiciones[primeraPos] = posiciones[segundaPos];
+            posiciones[segundaPos] = temp;
+
+            System.out.println("Los niños se han intercambiado de posición sigilosamente.");
+        }
+    }
+```
+- Método que cambia las ubicaciones de dos niños con una probabilidad del 30%.
+
+##### getLugar
+```java
+    private static String getLugar(int index) {
+        String[] lugares = {"Árbol", "Banco", "Arbusto", "Columpio", "Caseta", "Tobogán"};
+        return lugares[index];
+    }
+}
+```
+- Método que devuelve el nombre del lugar correspondiente a un índice usando un arreglo de strings.
 
 ### Pregunta 6:
 
