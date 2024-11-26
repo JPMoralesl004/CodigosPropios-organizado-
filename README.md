@@ -176,3 +176,27 @@ public class IntegralAproximada {
 4. **Repetir la Operación**:
    - Después de cada viaje, se pregunta al usuario si desea hacer otro viaje.
    - El bucle continúa hasta que el usuario decida terminar la simulación.
+
+### Pregunta 7:
+
+### Explicación de las Modificaciones:
+
+1. **Conocer la carga que sube en el montacargas con cada llamada**:
+   - Se ha añadido una línea que genera una carga aleatoria entre 30 y 75 kilos cada vez que se encuentra un niño:
+     ```java
+     double carga = 30 + (75 - 30) * random.nextDouble();
+     ```
+
+2. **Saber la carga total transportada en el montacargas durante la simulación**:
+   - Se ha añadido una variable `cargaTotal` para acumular la carga transportada durante la simulación:
+     ```java
+     double cargaTotal = 0.0;
+     ```
+   - Se actualiza `cargaTotal` cada vez que se encuentra un niño:
+     ```java
+     cargaTotal += carga;
+     ```
+   - Se muestra la carga total transportada después de cada intento y al final de la simulación:
+     ```java
+     System.out.println("Carga total transportada: " + cargaTotal + " kilos.");
+     ```
