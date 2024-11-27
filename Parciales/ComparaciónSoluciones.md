@@ -1,3 +1,172 @@
+## Comparación de los códigos de la integral transformada
+
+### Código del Masias:
+
+```java
+import java.util.Scanner;
+
+class Transformada {
+    public static void main(String[] args) {
+        double a = new Scanner(System.in).nextDouble();
+        double b = new Scanner(System.in).nextDouble();
+        double integral = 0;
+        final double PASO = 0.001;
+        for (double x = a; x <= b; x = x + PASO) {
+            integral = integral + PASO * funcion(x);
+        }
+        System.out.println("La integral entre [" + a + "] y [" + b + "] es :" + integral);
+    }
+
+    static double funcion(double x) {
+        return 5 * (Math.sin(x / 1.59) + 0.33 * Math.sin(3 * x / 1.59) + 0.2 * Math.sin(5 * x / 1.59));
+    }
+}
+```
+
+### Mi código:
+
+```java
+import java.util.Scanner;
+
+public class IntegralTransformada {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Introduce el valor de a: ");
+        double a = scanner.nextDouble();
+        System.out.print("Introduce el valor de b: ");
+        double b = scanner.nextDouble();
+
+        System.out.print("Introduce el número de rectángulos para la aproximación: ");
+        int numRectangulos = scanner.nextInt();
+
+        double integral = calcularIntegral(a, b, numRectangulos);
+
+        System.out.println("La integral aproximada es: " + integral);
+
+        scanner.close();
+    }
+
+    public static double calcularIntegral(double a, double b, int numRectangulos) {
+        double ancho = (b - a) / numRectangulos;
+        double suma = 0.0;
+
+        for (int i = 0; i < numRectangulos; i++) {
+            double x = a + (i + 0.5) * ancho;
+            double altura = funcion(x);
+            suma += altura * ancho;
+        }
+
+        return suma;
+    }
+
+    public static double funcion(double x) {
+        return 5 * (Math.sin(x / 1.59) + 0.33 * Math.sin(3 * x / 1.59) + 0.2 * Math.sin(5 * x / 1.59));
+    }
+}
+```
+
+#### Similitudes
+
+- **Función para Integrar:** Ambos códigos calculan la integral de la misma función matemática.
+- **Uso de `Scanner`:** Ambos usan `Scanner` para leer la entrada del usuario desde la consola.
+- **Clase `Math`:** Ambos utilizan funciones trigonométricas de la clase `Math`.
+
+#### Diferencias
+
+- **Método de Integración:**
+  - **Código de Masias:** Utiliza una aproximación simple mediante un bucle `for` con un paso fijo (`PASO`) para calcular la integral.
+  - **Mi código:** Utiliza el método de la suma de Riemann, dividiendo el rango de integración en un número definido de rectángulos (`numRectangulos`) y calculando el área de cada uno.
+
+- **Entrada del Usuario:**
+  - **Código de Masias:** Pide los valores de `a` y `b` directamente usando nuevas instancias de `Scanner` en cada lectura.
+  - **Mi código:** Pide los valores de `a`, `b` y `numRectangulos` una vez y guarda estos valores para su uso posterior.
+
+- **Estructura del Código:**
+  - **Código de Masias:** Utiliza un método principal (`main`) con la lógica completa del cálculo de la integral y la función `funcion`.
+  - **Mi código:** Descompone la lógica en métodos separados (`calcularIntegral` y `funcion`), siguiendo principios de diseño modular y separación de responsabilidades.
+
+- **Declaración de Variables:**
+  - **Código de Masias:** Declara e inicializa variables directamente dentro del método principal.
+  - **MI código:** Declara e inicializa variables dentro de los métodos correspondientes, asegurando que cada variable tenga un alcance limitado a su contexto.
+
+- **Aproximación de la Integral:**
+  - **Código del Masias:** Usa un paso fijo (`PASO = 0.001`) para la integración numérica.
+  - **Mi código:** Calcula el ancho de cada rectángulo basado en el número total de rectángulos (`numRectangulos`) definido por el usuario.
+
+#### Clean Code y Legibilidad
+
+- **Código de Masias:** 
+  - **Simplicidad:** Su código es simple y directo pero menos modular.
+  - **Uso de `Scanner`:** Crea múltiples instancias de `Scanner`, lo cual no es necesario y puede ser ineficiente.
+
+- **Mi código:**
+  - **Modularidad:** Tu código es más modular, lo que facilita la lectura y el mantenimiento.
+  - **Interacción del Usuario:** Proporciona mensajes más claros y detallados para la entrada del usuario.
+
+### Diferencias Detalladas
+
+#### Método de Integración
+
+- **Código de Masias:**
+  - **Aproximación Simple:** Usa una técnica de aproximación directa mediante un bucle `for` que incrementa en pasos fijos (`PASO = 0.001`) para calcular la integral.
+  - **Menor Flexibilidad:** La precisión de la integral depende del valor fijo de `PASO`, lo cual no se puede ajustar dinámicamente sin modificar el código.
+
+- **Mi código:**
+  - **Suma de Riemann:** Utiliza la suma de Riemann, dividiendo el intervalo de integración en un número de rectángulos (`numRectangulos`) especificado por el usuario.
+  - **Mayor Flexibilidad:** Permite al usuario definir la precisión de la aproximación especificando el número de rectángulos, lo que puede hacer la integral más o menos precisa según se requiera.
+
+#### Entrada del Usuario
+
+- **Código de Masias:**
+  - **Múltiples Instancias de `Scanner`:** Usa nuevas instancias de `Scanner` para cada entrada, lo cual puede ser redundante e ineficiente.
+  - **Entrada Directa y Simple:** Pide directamente los valores de `a` y `b` sin mucha interacción adicional.
+
+- **Mi código:**
+  - **Instancia Única de `Scanner`:** Usa una única instancia de `Scanner` para todas las entradas, lo cual es más eficiente y limpio.
+  - **Interacción Detallada:** Pide al usuario no solo los límites de integración `a` y `b`, sino también el número de rectángulos para la aproximación, proporcionando más control y flexibilidad al usuario.
+
+#### Estructura del Código
+
+- **Código de Masias:**
+  - **Método Principal con Toda la Lógica:** Contiene toda la lógica del cálculo de la integral en el método `main`, lo cual puede dificultar la lectura y el mantenimiento del código.
+  - **Menos Modular:** Las responsabilidades no están claramente separadas en métodos distintos.
+
+- **Mi código:**
+  - **Diseño Modular:** Descompone la lógica en varios métodos (`calcularIntegral` y `funcion`), siguiendo principios de diseño modular y separación de responsabilidades.
+  - **Claridad y Mantenimiento:** La separación en métodos hace que el código sea más claro y fácil de mantener.
+
+#### Declaración de Variables
+
+- **Código de Masias:**
+  - **Declaración Directa:** Declara e inicializa variables dentro del método `main`, manteniendo todo el estado en el mismo lugar.
+  - **Simplicidad:** Este enfoque es simple pero menos flexible y escalable.
+
+- **Mi código:**
+  - **Declaración en Métodos Correspondientes:** Declara e inicializa variables dentro de métodos específicos, lo que ayuda a limitar el alcance de las variables y mejora la claridad del código.
+  - **Mejora en el Alcance:** Las variables están contenidas dentro de sus contextos específicos, lo cual mejora la legibilidad y reduce errores.
+
+#### Aproximación de la Integral
+
+- **Código de Masias:**
+  - **Paso Fijo (`PASO`):** Usa un valor fijo para `PASO`, lo que define la precisión de la integral.
+  - **Menos Control:** El usuario no puede ajustar directamente la precisión sin modificar el código.
+
+- **Mi código:**
+  - **Ancho Variable:** Calcula el ancho de cada rectángulo basado en el número total de rectángulos (`numRectangulos`), lo que permite al usuario definir la precisión.
+  - **Mayor Control:** Proporciona al usuario la capacidad de ajustar la precisión a través del número de rectángulos.
+
+### Conclusión
+
+Ambos códigos calculan la integral de manera efectiva, pero utilizan enfoques diferentes:
+
+- **Código de Masias:** Es más directo y simple, pero menos modular y flexible. Utiliza una aproximación fija con `PASO`, lo cual puede ser limitante en términos de precisión ajustable.
+- **Tu código:** Es más modular y flexible, permitiendo al usuario ajustar la precisión de la aproximación a través del número de rectángulos. Además, sigue principios de diseño más limpios y eficaces.
+
+Cada enfoque tiene sus propias ventajas, pero tu código destaca por su modularidad, flexibilidad y claridad en la interacción con el usuario.
+
+¿Hay algún otro aspecto específico que te gustaría discutir o alguna pregunta adicional sobre las diferencias entre los códigos?
+
 ## Comparación de los códigos del Escondite
 
 ### Código de Masias:
