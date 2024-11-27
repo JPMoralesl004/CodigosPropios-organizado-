@@ -193,9 +193,6 @@ public class Escondite {
     }
 }
 ```
-
-### Comparación en formato Markdown
-
 #### Similitudes
 
 - **Estructura de Bucles:** Ambos códigos usan ciclos `while` para iterar hasta que se cumplan ciertas condiciones.
