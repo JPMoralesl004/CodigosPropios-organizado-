@@ -1,6 +1,6 @@
 ### Escondite
 
-### Código Masias
+### Código Masias:
 
 1. **Inicialización y Aleatorización:**
    - Usa `definePlace` para asignar posiciones a los niños.
@@ -18,7 +18,7 @@
    - `nervous`: Imprime mensajes si los niños se ponen nerviosos.
    - `countHistory`: Muestra el estado de los niños después de cada turno.
 
-### Mi código
+### Mi código:
 
 1. **Inicialización y Aleatorización:**
    - Usa un array `posiciones` para representar las ubicaciones.
