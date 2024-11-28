@@ -1,6 +1,7 @@
-### Explicaciones de mis soluciones de codigo del Parical II de progra 1.
+## Explicaciones de mis soluciones de codigo del Parical II de progra 1.
 
 ### Pregunta 2:
+
 #### Clase `IntegralTransformada`
 
 ```java
@@ -228,7 +229,7 @@ public class Escondite {
 - **`buscarNino`**: Verifica si el niño está en la posición buscada.
 - **`checkBusqueda`**: Realiza la comprobación final de la búsqueda.
 
-### Pregunta 4:
+### Preguntas 4 y 5:
 
 ### Agregar la probabilidad de que un niño se ponga nervioso y haga un ruido que delate su posición antes de cada turno par (5%)
 
