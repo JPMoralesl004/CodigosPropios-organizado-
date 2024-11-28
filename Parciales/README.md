@@ -232,88 +232,64 @@ public class Escondite {
 
 ### Agregar la probabilidad de que un niño se ponga nervioso y haga un ruido que delate su posición antes de cada turno par (5%)
 
+- Impedir que el usuario ingrese un número mayor a 6 o menor que 1, y reiniciar el programa en caso de ingreso incorrecto.
+- Extensiones mencionadas previamente en el enunciado del examen.
+
 ```java
-        while (intentos < maxIntentos && encontrados < 3) {
+import java.util.Random;
+import java.util.Scanner;
+
+public class Escondite {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+
+        int posNino1 = obtenerPosicionAleatoria(random, -1, -1, -1);
+        int posNino2 = obtenerPosicionAleatoria(random, posNino1, -1, -1);
+        int posNino3 = obtenerPosicionAleatoria(random, posNino1, posNino2, -1);
+
+        int intentos = 0;
+        int encontrados = 0;
+        final int MAX_INTENTOS = 12;
+        final int TURNO_CAMBIO = 7;
+        
+        boolean nervioso1 = false;
+        boolean nervioso2 = false;
+        boolean nervioso3 = false;
+
+        System.out.println("¡Los niños se han escondido!");
+        System.out.println("1-Árbol 2-Banco 3-Arbusto 4-Columpio 5-Caseta 6-Tobogán");
+
+        while (intentos < MAX_INTENTOS && encontrados < 3) {
             if (intentos % 2 == 0) {
-                delatarPosicion(random, nervioso, posiciones);
+                delatarPosicion(random, posNino1, posNino2, posNino3, nervioso1, nervioso2, nervioso3);
             }
-            if (intentos == turnoCambio) {
-                intercambiarUbicacion(random, posiciones);
+
+            if (intentos == TURNO_CAMBIO) {
+                int[] posiciones = intercambiarUbicacion(random, posNino1, posNino2, posNino3);
+                posNino1 = posiciones[0];
+                posNino2 = posiciones[1];
+                posNino3 = posiciones[2];
             }
 
             System.out.print("¿Dónde quieres buscar? ");
-            int busqueda = scanner.nextInt() - 1;
+            int busqueda = scanner.nextInt();
+            
+            // Validación de entrada
+            if (busqueda < 1 || busqueda > 6) {
+                System.out.println("Número inválido. Reiniciando el programa...");
+                main(args);
+                return;
+            }
+
+            busqueda -= 1;
             intentos++;
 
-            if (posiciones[busqueda] != 0) {
-                double chance = random.nextDouble();
-                if (chance > 0.1) {
-                    System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡Has encontrado al niño " + posiciones[busqueda] + "!");
-                    encontrados++;
-                    posiciones[busqueda] = 0;
-                } else {
-                    System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡No hay nadie!");
-                }
-            } else {
-                System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡No hay nadie!");
-            }
+            encontrados += buscarNino(busqueda, random, posNino1, posNino2, posNino3);
 
             System.out.println("Llevas " + intentos + " intento(s) y has encontrado " + encontrados + " niño(s).");
         }
-```
 
-- **Bucle Principal del Juego**:
-  ```java
-          while (intentos < maxIntentos && encontrados < 3) {
-              if (intentos % 2 == 0) {
-                  delatarPosicion(random, nervioso, posiciones);
-              }
-              if (intentos == turnoCambio) {
-                  intercambiarUbicacion(random, posiciones);
-              }
-  ```
-  - Se ejecuta un bucle `while` mientras el jugador tenga intentos disponibles y no haya encontrado a todos los niños.
-  - Cada dos turnos, se verifica si un niño hace un ruido con la función `delatarPosicion`.
-  - En el turno 7, los niños pueden cambiar de ubicación con la función `intercambiarUbicacion`.
-
-- **Entrada del Usuario y Búsqueda**:
-  ```java
-              System.out.print("¿Dónde quieres buscar? ");
-              int busqueda = scanner.nextInt() - 1;
-              intentos++;
-  ```
-  - Se solicita al usuario que ingrese una posición para buscar a los niños.
-  - Se incrementa el contador de intentos.
-
-- **Verificación de la Búsqueda**:
-  ```java
-              if (posiciones[busqueda] != 0) {
-                  double chance = random.nextDouble();
-                  if (chance > 0.1) {
-                      System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡Has encontrado al niño " + posiciones[busqueda] + "!");
-                      encontrados++;
-                      posiciones[busqueda] = 0;
-                  } else {
-                      System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡No hay nadie!");
-                  }
-              } else {
-                  System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡No hay nadie!");
-              }
-  ```
-  - Se verifica si el niño está en la posición buscada. Si el niño está presente y no se oculta nuevamente, se incrementa el contador de niños encontrados y se vacía la posición.
-
-- **Estado Actual del Juego**:
-  ```java
-              System.out.println("Llevas " + intentos + " intento(s) y has encontrado " + encontrados + " niño(s).");
-          }
-  ```
-  - Se imprime el estado actual del juego después de cada búsqueda.
-
-### Pregunta 5:
-
-### Permitir que en el turno 7 los niños cambien su ubicación con una probabilidad del 30%
-
-```java
         if (encontrados == 3) {
             System.out.println("¡Has encontrado a todos los niños!");
         } else {
@@ -323,63 +299,85 @@ public class Escondite {
         scanner.close();
     }
 
-    private static void delatarPosicion(Random random, boolean[] nervioso, int[] posiciones) {
-        for (int i = 0; i < nervioso.length; i++) {
-            double chance = random.nextDouble();
-            if (chance <= 0.05) {
-                nervioso[i] = true;
-                System.out.println("El niño " + (i + 1) + " ha hecho un ruido en la posición " + getLugar(posiciones[i] - 1) + "!");
-            } else {
-                nervioso[i] = false;
-            }
+    private static int obtenerPosicionAleatoria(Random random, int excl1, int excl2, int excl3) {
+        int posicion;
+        do {
+            posicion = random.nextInt(6);
+        } while (posicion == excl1 || posicion == excl2 || posicion == excl3);
+        return posicion;
+    }
+
+    private static void delatarPosicion(Random random, int posNino1, int posNino2, int posNino3, boolean nervioso1, boolean nervioso2, boolean nervioso3) {
+        if (random.nextDouble() <= 0.05) {
+            nervioso1 = true;
+            System.out.println("El niño 1 ha hecho un ruido en la posición " + getLugar(posNino1) + "!");
+        }
+        if (random.nextDouble() <= 0.05) {
+            nervioso2 = true;
+            System.out.println("El niño 2 ha hecho un ruido en la posición " + getLugar(posNino2) + "!");
+        }
+        if (random.nextDouble() <= 0.05) {
+            nervioso3 = true;
+            System.out.println("El niño 3 ha hecho un ruido en la posición " + getLugar(posNino3) + "!");
         }
     }
 
-    private static void intercambiarUbicacion(Random random, int[] posiciones) {
-        double chance = random.nextDouble();
-        if (chance <= 0.3) {
-            int primeraPos, segundaPos;
-            do {
-                primeraPos = random.nextInt(6);
-            } while (posiciones[primeraPos] == 0);
-            do {
-                segundaPos = random.nextInt(6);
-            } while (posiciones[segundaPos] == 0 || primeraPos == segundaPos);
-
-            int temp = posiciones[primeraPos];
-            posiciones[primeraPos] = posiciones[segundaPos];
-            posiciones[segundaPos] = temp;
-
+    private static int[] intercambiarUbicacion(Random random, int posNino1, int posNino2, int posNino3) {
+        int[] posiciones = {posNino1, posNino2, posNino3};
+        if (random.nextDouble() <= 0.3) {
+            int temp = posiciones[0];
+            posiciones[0] = posiciones[1];
+            posiciones[1] = temp;
             System.out.println("Los niños se han intercambiado de posición sigilosamente.");
+        }
+        return posiciones;
+    }
+
+    private static int buscarNino(int busqueda, Random random, int posNino1, int posNino2, int posNino3) {
+        if (busqueda == posNino1) {
+            return checkBusqueda(random, 1, busqueda, posNino1);
+        } else if (busqueda == posNino2) {
+            return checkBusqueda(random, 2, busqueda, posNino2);
+        } else if (busqueda == posNino3) {
+            return checkBusqueda(random, 3, busqueda, posNino3);
+        } else {
+            System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡No hay nadie!");
+            return 0;
+        }
+    }
+
+    private static int checkBusqueda(Random random, int nino, int busqueda, int posicion) {
+        if (random.nextDouble() > 0.1) {
+            System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡Has encontrado al niño " + nino + "!");
+            return 1;
+        } else {
+            System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡No hay nadie!");
+            return 0;
         }
     }
 
     private static String getLugar(int index) {
-        String[] lugares = {"Árbol", "Banco", "Arbusto", "Columpio", "Caseta", "Tobogán"};
-        return lugares[index];
+        switch (index) {
+            case 0: return "Árbol";
+            case 1: return "Banco";
+            case 2: return "Arbusto";
+            case 3: return "Columpio";
+            case 4: return "Caseta";
+            case 5: return "Tobogán";
+            default: return "";
+        }
     }
 }
-
 ```
-- **Fin del Juego**:
-  ```java
-          if (encontrados == 3) {
-              System.out.println("¡Has encontrado a todos los niños!");
-          } else {
-              System.out.println("¡Se acabaron los intentos! No has encontrado a todos los niños.");
-          }
 
-          scanner.close();
-      }
-  ```
-  - Se verifica si el jugador ha encontrado a todos los niños o ha agotado los intentos, y se imprimen los mensajes correspondientes.
-  - Se cierra el objeto `Scanner`.
+### Explicación de las Extensiones
 
-- **Métodos Auxiliares**:
-  - **delatarPosicion**:
-    ```java
-      private static void delatarPosicion(Random random, boolean[] nervioso, int[] posiciones) {
-          for (int i = 
+1. **Validación de Entrada**:
+   - Se verifica que el número ingresado por el usuario esté entre 1 y 6. En caso contrario, el programa se reinicia.
+
+2. **Extensiones Previamente Solicitadas**:
+   - **Delatar Posiciones**: Si el intento es par, y con una probabilidad del 5%, se delata la posición de los niños nerviosos.
+   - **Intercambio de Posiciones**: En el turno 7, los niños pueden intercambiar posiciones con una probabilidad del 30%.
 
 ### Pregunta 6:
 
