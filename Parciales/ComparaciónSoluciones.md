@@ -229,9 +229,11 @@ class Escondite {
         System.out.println("Niño 3 " + (boyThree == VISIBLE ? "ENCONTRADO!" : "escondido"));
     }
 }
+```
+
 
 Mi codigo:
-
+```java
 import java.util.Random;
 import java.util.Scanner;
 
@@ -355,6 +357,7 @@ public class Escondite {
         }
     }
 }
+```
 
 ### **1. Organización y Modularidad**
 - **Mi código**: Tiene una estructura modular más detallada, con métodos como `obtenerPosicionAleatoria`, `intercambiarUbicacion`, y `delatarPosicion`, lo que facilita el mantenimiento y la legibilidad. Sin embargo, algunas funciones tienen varias responsabilidades, lo que puede hacerlas más complejas (por ejemplo, `buscarNino` no solo busca, también maneja mensajes y actualiza el estado).
