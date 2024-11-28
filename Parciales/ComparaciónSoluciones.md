@@ -88,7 +88,7 @@ public class IntegralTransformada {
 
 - **Declaración de Variables:**
   - **Código de Masias:** Declara e inicializa variables directamente dentro del método principal.
-  - **MI código:** Declara e inicializa variables dentro de los métodos correspondientes, asegurando que cada variable tenga un alcance limitado a su contexto.
+  - **Mi código:** Declara e inicializa variables dentro de los métodos correspondientes, asegurando que cada variable tenga un alcance limitado a su contexto.
 
 - **Aproximación de la Integral:**
   - **Código del Masias:** Usa un paso fijo (`PASO = 0.001`) para la integración numérica.
