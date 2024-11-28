@@ -163,10 +163,6 @@ Ambos códigos calculan la integral de manera efectiva, pero utilizan enfoques d
 - **Código de Masias:** Es más directo y simple, pero menos modular y flexible. Utiliza una aproximación fija con `PASO`, lo cual puede ser limitante en términos de precisión ajustable.
 - **Tu código:** Es más modular y flexible, permitiendo al usuario ajustar la precisión de la aproximación a través del número de rectángulos. Además, sigue principios de diseño más limpios y eficaces.
 
-Cada enfoque tiene sus propias ventajas, pero tu código destaca por su modularidad, flexibilidad y claridad en la interacción con el usuario.
-
-¿Hay algún otro aspecto específico que te gustaría discutir o alguna pregunta adicional sobre las diferencias entre los códigos?
-
 ## Comparación de los códigos del Escondite
 
 ### Código de Masias:
@@ -385,8 +381,6 @@ public class Escondite {
 - **Interacción con el Usuario:**
   - **Código de Masias:** Pregunta al usuario dónde buscar en cada turno y actualiza el estado de los niños.
   - **Mi código:** Similarmente, solicita al usuario ingresar una posición y maneja las respuestas, pero también incluye cambios de posiciones en ciertos turnos.
-
-¡Claro! Vamos a profundizar en las diferencias entre tu código y el de tu profesor para el reto del escondite.
 
 ### Diferencias Detalladas
 
@@ -608,8 +602,6 @@ public class Montacargas {
   - **Código del profesor:** Pregunta al usuario si desea continuar la simulación después de cada ciclo.
   - **Tu código:** Implementa una funcionalidad similar para continuar la simulación.
  
-  - ¡Perfecto! Vamos a profundizar en las diferencias detalladas entre el código del profesor y tu código para el Montacargas.
-
 ## Diferencias Detalladas
 
 #### Enfoque Modular
