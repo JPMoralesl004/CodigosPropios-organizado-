@@ -82,68 +82,151 @@ public class Escondite {
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
 
-        int[] posiciones = new int[6];
-        boolean[] nervioso = new boolean[3];
+        int posNino1 = obtenerPosicionAleatoria(random, -1, -1, -1);
+        int posNino2 = obtenerPosicionAleatoria(random, posNino1, -1, -1);
+        int posNino3 = obtenerPosicionAleatoria(random, posNino1, posNino2, -1);
+
         int intentos = 0;
         int encontrados = 0;
-        int maxIntentos = 12;
-        int turnoCambio = 7;
-
-        for (int i = 0; i < 3; i++) {
-            int posicion;
-            do {
-                posicion = random.nextInt(6);
-            } while (posiciones[posicion] != 0);
-            posiciones[posicion] = i + 1;
-        }
+        final int MAX_INTENTOS = 12;
+        final int TURNO_CAMBIO = 7;
+        
+        boolean nervioso1 = false;
+        boolean nervioso2 = false;
+        boolean nervioso3 = false;
 
         System.out.println("¡Los niños se han escondido!");
         System.out.println("1-Árbol 2-Banco 3-Arbusto 4-Columpio 5-Caseta 6-Tobogán");
+
+        while (intentos < MAX_INTENTOS && encontrados < 3) {
+            if (intentos % 2 == 0) {
+                delatarPosicion(random, posNino1, posNino2, posNino3, nervioso1, nervioso2, nervioso3);
+            }
+
+            if (intentos == TURNO_CAMBIO) {
+                int[] posiciones = intercambiarUbicacion(random, posNino1, posNino2, posNino3);
+                posNino1 = posiciones[0];
+                posNino2 = posiciones[1];
+                posNino3 = posiciones[2];
+            }
+
+            System.out.print("¿Dónde quieres buscar? ");
+            int busqueda = scanner.nextInt() - 1;
+            intentos++;
+
+            encontrados += buscarNino(busqueda, random, posNino1, posNino2, posNino3);
+
+            System.out.println("Llevas " + intentos + " intento(s) y has encontrado " + encontrados + " niño(s).");
+        }
+
+        if (encontrados == 3) {
+            System.out.println("¡Has encontrado a todos los niños!");
+        } else {
+            System.out.println("¡Se acabaron los intentos! No has encontrado a todos los niños.");
+        }
+
+        scanner.close();
+    }
+
+    private static int obtenerPosicionAleatoria(Random random, int excl1, int excl2, int excl3) {
+        int posicion;
+        do {
+            posicion = random.nextInt(6);
+        } while (posicion == excl1 || posicion == excl2 || posicion == excl3);
+        return posicion;
+    }
+
+    private static void delatarPosicion(Random random, int posNino1, int posNino2, int posNino3, boolean nervioso1, boolean nervioso2, boolean nervioso3) {
+        if (random.nextDouble() <= 0.05) {
+            nervioso1 = true;
+            System.out.println("El niño 1 ha hecho un ruido en la posición " + getLugar(posNino1) + "!");
+        }
+        if (random.nextDouble() <= 0.05) {
+            nervioso2 = true;
+            System.out.println("El niño 2 ha hecho un ruido en la posición " + getLugar(posNino2) + "!");
+        }
+        if (random.nextDouble() <= 0.05) {
+            nervioso3 = true;
+            System.out.println("El niño 3 ha hecho un ruido en la posición " + getLugar(posNino3) + "!");
+        }
+    }
+
+    private static int[] intercambiarUbicacion(Random random, int posNino1, int posNino2, int posNino3) {
+        int[] posiciones = {posNino1, posNino2, posNino3};
+        if (random.nextDouble() <= 0.3) {
+            int temp = posiciones[0];
+            posiciones[0] = posiciones[1];
+            posiciones[1] = temp;
+            System.out.println("Los niños se han intercambiado de posición sigilosamente.");
+        }
+        return posiciones;
+    }
+
+    private static int buscarNino(int busqueda, Random random, int posNino1, int posNino2, int posNino3) {
+        if (busqueda == posNino1) {
+            return checkBusqueda(random, 1, busqueda, posNino1);
+        } else if (busqueda == posNino2) {
+            return checkBusqueda(random, 2, busqueda, posNino2);
+        } else if (busqueda == posNino3) {
+            return checkBusqueda(random, 3, busqueda, posNino3);
+        } else {
+            System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡No hay nadie!");
+            return 0;
+        }
+    }
+
+    private static int checkBusqueda(Random random, int nino, int busqueda, int posicion) {
+        if (random.nextDouble() > 0.1) {
+            System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡Has encontrado al niño " + nino + "!");
+            return 1;
+        } else {
+            System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡No hay nadie!");
+            return 0;
+        }
+    }
+
+    private static String getLugar(int index) {
+        switch (index) {
+            case 0: return "Árbol";
+            case 1: return "Banco";
+            case 2: return "Arbusto";
+            case 3: return "Columpio";
+            case 4: return "Caseta";
+            case 5: return "Tobogán";
+            default: return "";
+        }
+    }
+}
 ```
 
-- **Importaciones**:
-  ```java
-  import java.util.Random;
-  import java.util.Scanner;
-  ```
-  - Se importan las clases `Random` y `Scanner` para generar números aleatorios y leer la entrada del usuario desde la consola.
+## Explicación del Código
 
-- **Clase Principal y Declaraciones Iniciales**:
-  ```java
-  public class Escondite {
-      public static void main(String[] args) {
-          Scanner scanner = new Scanner(System.in);
-          Random random = new Random();
+#### Variables Principales:
+- `Scanner scanner`: Para la entrada de datos del usuario.
+- `Random random`: Para generar posiciones y decisiones aleatorias.
+- `int posNino1, posNino2, posNino3`: Posiciones de los tres niños.
+- `int intentos`: Contador de intentos realizados.
+- `int encontrados`: Contador de niños encontrados.
+- `boolean nervioso1, nervioso2, nervioso3`: Estado de nerviosismo de cada niño.
 
-          int[] posiciones = new int[6];
-          boolean[] nervioso = new boolean[3];
-          int intentos = 0;
-          int encontrados = 0;
-          int maxIntentos = 12;
-          int turnoCambio = 7;
-  ```
-  - Se declara la clase principal `Escondite` y el método `main`.
-  - Se crean objetos `Scanner` y `Random`.
-  - Se inicializan los arreglos `posiciones` y `nervioso` y las variables de control `intentos`, `encontrados`, `maxIntentos` y `turnoCambio`.
+#### Función Principal (`main`):
+1. **Inicialización de Posiciones**: Se generan posiciones aleatorias para los niños, sin repetir.
+2. **Introducción**: Se muestran los posibles lugares donde pueden estar escondidos los niños.
+3. **Bucle de Búsqueda**: Mientras queden intentos y no se hayan encontrado a todos los niños:
+   - **Delatar Posición**: Si el intento es par, se delata la posición de algún niño nervioso.
+   - **Cambio de Posición**: En el turno correspondiente, los niños intercambian posiciones.
+   - **Búsqueda**: El jugador busca en una ubicación ingresada:
+     - Si encuentra a un niño, se incrementa el contador de encontrados.
+     - Si no, se muestra un mensaje de que no hay nadie.
+   - Se muestran los intentos y niños encontrados hasta el momento.
+4. **Resultado Final**: Se muestra el resultado del juego.
 
-- **Inicialización de Posiciones**:
-  ```java
-          for (int i = 0; i < 3; i++) {
-              int posicion;
-              do {
-                  posicion = random.nextInt(6);
-              } while (posiciones[posicion] != 0);
-              posiciones[posicion] = i + 1;
-          }
-  ```
-  - Se asignan posiciones aleatorias únicas a los tres niños utilizando un bucle `do-while`.
-
-- **Mensajes de Inicio**:
-  ```java
-          System.out.println("¡Los niños se han escondido!");
-          System.out.println("1-Árbol 2-Banco 3-Arbusto 4-Columpio 5-Caseta 6-Tobogán");
-  ```
-  - Se imprimen mensajes indicando que los niños se han escondido y mostrando las posibles ubicaciones.
+#### Funciones Auxiliares:
+- **`obtenerPosicionAleatoria`**: Genera una posición aleatoria distinta de las ya asignadas.
+- **`delatarPosicion`**: Determina si algún niño se pone nervioso y delata su posición.
+- **`intercambiarUbicacion`**: Intercambia las posiciones de los niños aleatoriamente.
+- **`buscarNino`**: Verifica si el niño está en la posición buscada.
+- **`checkBusqueda`**: Realiza la comprobación final de la búsqueda.
 
 ### Pregunta 4:
 
