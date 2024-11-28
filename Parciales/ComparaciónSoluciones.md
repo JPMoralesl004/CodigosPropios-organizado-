@@ -163,274 +163,39 @@ public class IntegralTransformada {
 
 ## Comparación de los códigos del Escondite
 
-### Código de Masias:
+### **1. Organización y Modularidad**
+- **Mi código**: Tiene una estructura modular más detallada, con métodos como `obtenerPosicionAleatoria`, `intercambiarUbicacion`, y `delatarPosicion`, lo que facilita el mantenimiento y la legibilidad. Sin embargo, algunas funciones tienen varias responsabilidades, lo que puede hacerlas más complejas (por ejemplo, `buscarNino` no solo busca, también maneja mensajes y actualiza el estado).
+- **Código de Masias**: Es más compacto, con menos métodos. Sin embargo, sacrifica claridad y reutilización al incluir más lógica directamente en el método `main`. La modularidad es menor en comparación con tu versión.
 
-```java
-import java.util.Scanner;
+---
 
-class Escondite {
-    public static void main(String[] args) {
+### **2. Manejo de Aleatoriedad y Nerviosismo**
+- **Mi código**: Usa probabilidades (como `random.nextDouble() <= 0.05`) para modelar el nerviosismo de los niños y definir si cambian de posición o hacen ruido. Esto introduce más realismo en el comportamiento, pero también hace que el juego dependa más de la suerte.
+- **Código de Masias**: El comportamiento aleatorio está presente pero simplificado, como en `updateNervousness`, donde la probabilidad de sonidos es fija y más predecible. Es más directo y menos complejo, aunque menos detallado.
 
-        final int PLACES = 6;
-        final int VISIBLE = 0;
-        int boyOne = VISIBLE, boyTwo = VISIBLE, boyThree = VISIBLE;
+---
 
-        boyOne = definePlace(PLACES, boyTwo, boyThree);
-        boyTwo = definePlace(PLACES, boyOne, boyThree);
-        boyThree = definePlace(PLACES, boyTwo, boyTwo);
-        boolean arePlaying = true;
-        boolean allFound = false;
-        int turn = 0;
+### **3. Claridad y Mensajes al Usuario**
+- **Mi código**: Incluye mensajes descriptivos que hacen el juego más interactivo para el usuario (por ejemplo, describiendo los lugares y detallando acciones como intercambios o sonidos). Esto mejora la experiencia de juego, aunque puede hacer que el código parezca más cargado.
+- **Código de Masias**: Los mensajes son más funcionales y menos detallados. Por ejemplo, el sistema de turnos y las posiciones de los niños se imprimen directamente como números, lo que puede ser menos amigable para el jugador.
 
-        while (arePlaying) {
-            turn++;
-            nervous(boyOne, boyTwo, boyThree, turn);
-            System.out.print("TURNO [" + turn + "] Dónde mirar? [" + boyOne + ":" + boyTwo + ":" + boyThree + "] ");
-            int guess = new Scanner(System.in).nextInt();
+---
 
-            boyOne = lookAt(boyOne, guess);
-            boyTwo = lookAt(boyTwo, guess);
-            boyThree = lookAt(boyThree, guess);
+### **4. Complejidad del Flujo del Juego**
+- **Mi código**: Incluye más mecánicas como los intercambios de posiciones y la opción de reiniciar el juego si el jugador ingresa un número inválido. Esto agrega profundidad, pero puede hacer que el flujo sea más difícil de seguir para el programador.
+- **Código de Masias**: El flujo es más sencillo y directo, con una menor cantidad de eventos aleatorios y reglas. Esto lo hace más fácil de seguir, aunque puede parecer más monótono desde el punto de vista del jugador.
 
-            allFound = boyOne == VISIBLE && boyTwo == VISIBLE && boyThree == VISIBLE;
-            arePlaying = turn < 12 && !allFound;
-            countHistory(turn, boyOne, boyTwo, boyThree);
-        }
-    }
+---
 
-    static void nervous(int boyOne, int boyTwo, int boyThree, int turn) {
-        if (turn % 2 == 0) {
-            final int VISIBLE = 0;
-            String sound = "Aguzando el oido...";
-            sound = sound + (boyOne != VISIBLE && Math.random() < 0.7 ? boyOne + ", " : "");
-            sound = sound + (boyTwo != VISIBLE && Math.random() < 0.7 ? boyTwo + ", " : "");
-            sound = sound + (boyThree != VISIBLE && Math.random() < 0.7 ? boyThree : "");
-            System.out.println(sound);
-        }
-    }
+### **5. Uso de Constantes y Manejo de Datos**
+- **Mi código**: Usas constantes como `MAX_INTENTOS` y `TURNO_CAMBIO`, lo que hace que las reglas del juego sean fáciles de modificar. Además, tienes métodos como `getLugar` para traducir índices en nombres de lugares, mejorando la claridad.
+- **Código de Masias**: También usa algunas constantes (como `VISIBLE`), pero los nombres son menos descriptivos y no tiene un equivalente directo a tu `getLugar`, lo que lo hace menos intuitivo para alguien que no esté familiarizado con el código.
 
-    static int definePlace(int numberOfPlaces, int forbiddenPlaceOne, int forbiddenPlacetwo) {
-        int place;
-        do {
-            place = (int) (Math.random() * numberOfPlaces + 1);
-        } while (place == forbiddenPlaceOne || place == forbiddenPlacetwo);
-        return place;
-    }
+---
 
-    static int lookAt(int boy, int guess) {
-        return boy == guess && Math.random() > 0.1 ? 0 : boy;
-    }
-
-    static void countHistory(int turn, int boyOne, int boyTwo, int boyThree) {
-        final int VISIBLE = 0;
-        System.out.println("Turno " + turn);
-        System.out.println("Niño 1 " + (boyOne == VISIBLE ? "ENCONTRADO!" : "escondido"));
-        System.out.println("Niño 2 " + (boyTwo == VISIBLE ? "ENCONTRADO!" : "escondido"));
-        System.out.println("Niño 3 " + (boyThree == VISIBLE ? "ENCONTRADO!" : "escondido"));
-    }
-}
-```
-
-### Mi código
-
-```java
-import java.util.Random;
-import java.util.Scanner;
-
-public class Escondite {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Random random = new Random();
-
-        int[] posiciones = new int[6];
-        boolean[] nervioso = new boolean[3];
-        int intentos = 0;
-        int encontrados = 0;
-        int maxIntentos = 12;
-        int turnoCambio = 7;
-
-        for (int i = 0; i < 3; i++) {
-            int posicion;
-            do {
-                posicion = random.nextInt(6);
-
-            } while (posiciones[posicion] != 0);
-            posiciones[posicion] = i + 1;
-        }
-
-        System.out.println("¡Los niños se han escondido!");
-        System.out.println("1-Árbol 2-Banco 3-Arbusto 4-Columpio 5-Caseta 6-Tobogán");
-
-        while (intentos < maxIntentos && encontrados < 3) {
-
-            if (intentos % 2 == 0) {
-                delatarPosicion(random, nervioso, posiciones);
-            }
-
-            if (intentos == turnoCambio) {
-                intercambiarUbicacion(random, posiciones);
-            }
-
-            System.out.print("¿Dónde quieres buscar? ");
-            int busqueda = scanner.nextInt() - 1;
-            intentos++;
-
-            if (posiciones[busqueda] != 0) {
-                double chance = random.nextDouble();
-
-                if (chance > 0.1) {
-                    System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡Has encontrado al niño " + posiciones[busqueda] + "!");
-                    encontrados++;
-                    posiciones[busqueda] = 0;
-
-                } else {
-                    System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡No hay nadie!");
-                }
-
-            } else {
-                System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡No hay nadie!");
-            }
-
-            System.out.println("Llevas " + intentos + " intento(s) y has encontrado " + encontrados + " niño(s).");
-        }
-
-        if (encontrados == 3) {
-            System.out.println("¡Has encontrado a todos los niños!");
-
-        } else {
-            System.out.println("¡Se acabaron los intentos! No has encontrado a todos los niños.");
-        }
-
-        scanner.close();
-    }
-
-    private static void delatarPosicion(Random random, boolean[] nervioso, int[] posiciones) {
-
-        for (int i = 0; i < nervioso.length; i++) {
-            double chance = random.nextDouble();
-
-            if (chance <= 0.05) {
-                nervioso[i] = true;
-                System.out.println("El niño " + (i + 1) + " ha hecho un ruido en la posición " + getLugar(posiciones[i] - 1) + "!");
-
-            } else {
-                nervioso[i] = false;
-            }
-        }
-    }
-
-    private static void intercambiarUbicacion(Random random, int[] posiciones) {
-        double chance = random.nextDouble();
-
-        if (chance <= 0.3) {
-            int primeraPos, segundaPos;
-
-            do {
-                primeraPos = random.nextInt(6);
-
-            } while (posiciones[primeraPos] == 0);
-
-            do {
-                segundaPos = random.nextInt(6);
-                
-            } while (posiciones[segundaPos] == 0 || primeraPos == segundaPos);
-
-            int temp = posiciones[primeraPos];
-            posiciones[primeraPos] = posiciones[segundaPos];
-            posiciones[segundaPos] = temp;
-
-            System.out.println("Los niños se han intercambiado de posición sigilosamente.");
-        }
-    }
-
-    private static String getLugar(int index) {
-        switch (index) {
-            case 0: return "Árbol";
-            case 1: return "Banco";
-            case 2: return "Arbusto";
-            case 3: return "Columpio";
-            case 4: return "Caseta";
-            case 5: return "Tobogán";
-            default: return "";
-        }
-    }
-}
-```
-#### Similitudes
-
-- **Estructura de Bucles:** Ambos códigos usan ciclos `while` para iterar hasta que se cumplan ciertas condiciones.
-- **Aleatorización:** Implementan aleatorización para determinar las posiciones de los niños.
-- **Métodos para Actualizar Estado:** Ambos incluyen métodos para actualizar y mostrar el estado del juego.
-
-#### Diferencias
-
-- **Enfoque Modular:**
-  - **Código de Masias:** Modularizado con funciones dedicadas a cada parte del proceso (nerviosismo, definición de posiciones, etc.).
-  - **Mi código:** También modular, pero integra algunas funciones de manera más compacta.
-
-- **Manejo de Estado:**
-  - **Código de Masias:** Usa variables individuales (`boyOne`, `boyTwo`, `boyThree`).
-  - **Mi código:** Usa arrays (`posiciones`, `nervioso`) para manejar el estado de los niños.
-
-- **Calculo de Posiciones y Nerviosismo:**
-  - **Código de Masias:** Define las posiciones con `definePlace` y maneja el nerviosismo con `nervous`, añadiendo mensajes aleatorios.
-  - **Mi código:** Usa la función `delatarPosicion` para determinar el nerviosismo y `intercambiarUbicacion` para mezclar posiciones, añadiendo variabilidad.
-
-- **Interacción con el Usuario:**
-  - **Código de Masias:** Pregunta al usuario dónde buscar en cada turno y actualiza el estado de los niños.
-  - **Mi código:** Similarmente, solicita al usuario ingresar una posición y maneja las respuestas, pero también incluye cambios de posiciones en ciertos turnos.
-
-### Diferencias Detalladas
-
-#### Enfoque Modular
-
-- **Código de Masias:**
-  - **Modularidad:** El código del profesor tiene una estructura muy modular, dividiendo claramente las responsabilidades en funciones como `definePlace`, `lookAt`, `nervous` y `countHistory`.
-  - **Funciones Específicas:** Cada función tiene una tarea clara y específica: `definePlace` asigna posiciones aleatorias, `lookAt` verifica si un niño fue encontrado, `nervous` simula nerviosismo de los niños, y `countHistory` imprime el estado del juego.
-
-- **Mi código:**
-  - **Modularidad Simplificada:** Aunque tu código también es modular, las funciones están integradas más directamente en el flujo principal del programa.
-  - **Funciones Compactas:** Funciones como `delatarPosicion` y `intercambiarUbicacion` manejan varias responsabilidades, como determinar el nerviosismo de los niños y su reubicación.
-
-#### Manejo de Estado
-
-- **Código de Masias:**
-  - **Variables Individuales:** Usa variables individuales (`boyOne`, `boyTwo`, `boyThree`) para mantener el estado de los niños.
-  - **Estado Simples:** El uso de variables simples facilita el seguimiento del estado de cada niño por separado.
-
-- **Mi código:**
-  - **Arrays para el Estado:** Usa arrays (`posiciones`, `nervioso`) para manejar el estado de los niños, lo que permite escalar fácilmente si se añaden más niños.
-  - **Estado Complejo:** Maneja estados más complejos con arrays, haciendo posible la integración de características adicionales como la reubicación de los niños.
-
-#### Calculo de Posiciones y Nerviosismo
-
-- **Código de Masias:**
-  - **Definición de Posiciones:** Usa la función `definePlace` para asignar posiciones aleatorias a los niños, asegurando que no se repitan.
-  - **Manejo del Nerviosismo:** Usa la función `nervous` para imprimir mensajes de nerviosismo con una probabilidad fija cuando los turnos son pares.
-
-- **Mi código:**
-  - **Definición de Posiciones:** Asigna posiciones aleatorias a los niños dentro de un bucle `for`, usando la clase `Random` y evitando repeticiones.
-  - **Manejo del Nerviosismo:** Usa la función `delatarPosicion` para determinar el nerviosismo de los niños con una probabilidad fija, y la función `intercambiarUbicacion` para mezclar posiciones en ciertos turnos, añadiendo una capa extra de variabilidad.
-
-#### Interacción con el Usuario
-
-- **Código de Masias:**
-  - **Interacción Directa:** Solicita al usuario una entrada de posición en cada turno y actualiza el estado de los niños en función de esa entrada.
-  - **Feedback del Juego:** Proporciona mensajes detallados sobre el estado del juego y los niños encontrados después de cada turno.
-
-- **Mi código:**
-  - **Interacción Directa:** Similarmente, solicita al usuario que ingrese una posición para buscar a los niños.
-  - **Cambio de Posiciones:** Además de la entrada directa del usuario, tu código incluye la función `intercambiarUbicacion` que cambia las posiciones de los niños en un turno específico, lo que introduce una capa adicional de desafío.
-
-#### Detalles de Implementación
-
-- **Código de Masias:**
-  - **Métodos Claros y Concisos:** Cada método en el código del profesor tiene una responsabilidad específica y clara, lo que facilita la comprensión y el mantenimiento del código.
-  - **Impresión del Estado del Juego:** Usa la función `countHistory` para imprimir el estado del juego después de cada turno, proporcionando un seguimiento claro del progreso del juego.
-
-- **Mi código:**
-  - **Métodos Integrados:** Aunque tus métodos también tienen responsabilidades claras, están más integrados en el flujo del programa principal, lo que puede hacer que el código sea más compacto pero menos modular.
-  - **Mensajes de Estado:** Tu código imprime mensajes sobre el estado del juego y los niños encontrados después de cada turno, pero también incluye mensajes sobre el nerviosismo y la reubicación de los niños, añadiendo más dinamismo al juego.
+### **Conclusión**
+- **Ventajas de mi codigo**: Es más detallado, interactivo y modular. Es ideal si quieres priorizar la experiencia del usuario y explorar mecánicas adicionales como intercambios y probabilidades de eventos.
+- **Ventajas del código de Masias**: Es más compacto y fácil de entender en un vistazo. Podría ser mejor para principiantes o si el objetivo es mantener un diseño simple y funcional.
 
 ## Comparación de los códigos del Montacargas
 
