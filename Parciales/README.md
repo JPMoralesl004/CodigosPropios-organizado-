@@ -276,6 +276,7 @@ public class Escondite {
         return lugares[index];
     }
 }
+
 ```
 - **Fin del Juego**:
   ```java
