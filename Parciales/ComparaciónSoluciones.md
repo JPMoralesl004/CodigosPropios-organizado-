@@ -104,7 +104,7 @@ public class IntegralTransformada {
   - **Modularidad:** Tu código es más modular, lo que facilita la lectura y el mantenimiento.
   - **Interacción del Usuario:** Proporciona mensajes más claros y detallados para la entrada del usuario.
 
-### Diferencias Detalladas
+## Diferencias Detalladas
 
 #### Método de Integración
 
@@ -162,6 +162,198 @@ public class IntegralTransformada {
 - **Tu código:** Es más modular y flexible, permitiendo al usuario ajustar la precisión de la aproximación a través del número de rectángulos. Además, sigue principios de diseño más limpios y eficaces.
 
 ## Comparación de los códigos del Escondite
+
+### Codigo de Masias:
+
+import java.util.Scanner;
+
+class Escondite {
+    public static void main(String[] args) {
+
+        final int TOTAL_PLACES = 6;
+        final int VISIBLE = 0;
+        int firstPlayerPosition = VISIBLE, secondPlayerPosition = VISIBLE, thirdPlayerPosition = VISIBLE;
+
+        firstPlayerPosition = definePlace(TOTAL_PLACES, secondPlayerPosition, thirdPlayerPosition);
+        secondPlayerPosition = definePlace(TOTAL_PLACES, firstPlayerPosition, thirdPlayerPosition);
+        thirdPlayerPosition = definePlace(TOTAL_PLACES, secondPlayerPosition, secondPlayerPosition);
+        boolean gameInProgress = true;
+        boolean allPlayersFound = false;
+        int currentTurn = 0;
+
+        while (gameInProgress) {
+            currentTurn++;
+            updateNervousness(firstPlayerPosition, secondPlayerPosition, thirdPlayerPosition, currentTurn);
+            System.out.print("TURNO ["+currentTurn+"] Dónde mirar? [" + firstPlayerPosition + ":" + secondPlayerPosition + ":" + thirdPlayerPosition + "] ");
+            int playerGuess = new Scanner(System.in).nextInt();
+
+            firstPlayerPosition = lookAt(firstPlayerPosition, playerGuess);
+            secondPlayerPosition = lookAt(secondPlayerPosition, playerGuess);
+            thirdPlayerPosition = lookAt(thirdPlayerPosition, playerGuess);
+
+            allPlayersFound = firstPlayerPosition == VISIBLE && secondPlayerPosition == VISIBLE && thirdPlayerPosition == VISIBLE;
+            gameInProgress = currentTurn < 12 && !allPlayersFound;
+            tellTale(currentTurn, firstPlayerPosition, secondPlayerPosition, thirdPlayerPosition);
+        }
+    }
+
+    static void updateNervousness(int boyOne, int boyTwo, int boyThree, int turn) {
+        if (turn%2==0) {
+            final int VISIBLE = 0;
+            String sound = "Aguzando el oido...";
+            sound = sound + (boyOne != VISIBLE && Math.random() < 0.7 ? boyOne + ", " : "");
+            sound = sound + (boyTwo != VISIBLE && Math.random() < 0.7 ? boyTwo + ", " : "");
+            sound = sound + (boyThree != VISIBLE && Math.random() < 0.7 ? boyThree : "");
+            System.out.println(sound);
+        }
+    }
+
+    static int definePlace(int numberOfPlaces, int forbiddenPlaceOne, int forbiddenPlaceTwo) {
+        int place;
+        do {
+            place = (int) (Math.random() * numberOfPlaces + 1);
+        } while (place == forbiddenPlaceOne || place == forbiddenPlaceTwo);
+        return place;
+    }
+
+    static int lookAt(int boy, int guess) {
+        return boy == guess && Math.random() > 0.1 ? 0 : boy;
+    }
+
+    static void tellTale(int turn, int boyOne, int boyTwo, int boyThree) {
+        final int VISIBLE = 0;
+        System.out.println("Turno " + turn);
+        System.out.println("Niño 1 " + (boyOne == VISIBLE ? "ENCONTRADO!" : "escondido"));
+        System.out.println("Niño 2 " + (boyTwo == VISIBLE ? "ENCONTRADO!" : "escondido"));
+        System.out.println("Niño 3 " + (boyThree == VISIBLE ? "ENCONTRADO!" : "escondido"));
+    }
+}
+
+Mi codigo:
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class Escondite {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+
+        int posNino1 = obtenerPosicionAleatoria(random, -1, -1, -1);
+        int posNino2 = obtenerPosicionAleatoria(random, posNino1, -1, -1);
+        int posNino3 = obtenerPosicionAleatoria(random, posNino1, posNino2, -1);
+
+        int intentos = 0;
+        int encontrados = 0;
+        final int MAX_INTENTOS = 12;
+        final int TURNO_CAMBIO = 7;
+        
+        boolean nervioso1 = false;
+        boolean nervioso2 = false;
+        boolean nervioso3 = false;
+
+        System.out.println("¡Los niños se han escondido!");
+        System.out.println("1-Árbol 2-Banco 3-Arbusto 4-Columpio 5-Caseta 6-Tobogán");
+
+        while (intentos < MAX_INTENTOS && encontrados < 3) {
+            if (intentos % 2 == 0) {
+                delatarPosicion(random, posNino1, posNino2, posNino3, nervioso1, nervioso2, nervioso3);
+            }
+
+            if (intentos == TURNO_CAMBIO) {
+                int[] posiciones = intercambiarUbicacion(random, posNino1, posNino2, posNino3);
+                posNino1 = posiciones[0];
+                posNino2 = posiciones[1];
+                posNino3 = posiciones[2];
+            }
+
+            System.out.print("¿Dónde quieres buscar? ");
+            int busqueda = scanner.nextInt() - 1;
+            intentos++;
+
+            encontrados += buscarNino(busqueda, random, posNino1, posNino2, posNino3);
+
+            System.out.println("Llevas " + intentos + " intento(s) y has encontrado " + encontrados + " niño(s).");
+        }
+
+        if (encontrados == 3) {
+            System.out.println("¡Has encontrado a todos los niños!");
+        } else {
+            System.out.println("¡Se acabaron los intentos! No has encontrado a todos los niños.");
+        }
+
+        scanner.close();
+    }
+
+    private static int obtenerPosicionAleatoria(Random random, int excl1, int excl2, int excl3) {
+        int posicion;
+        do {
+            posicion = random.nextInt(6);
+        } while (posicion == excl1 || posicion == excl2 || posicion == excl3);
+        return posicion;
+    }
+
+    private static void delatarPosicion(Random random, int posNino1, int posNino2, int posNino3, boolean nervioso1, boolean nervioso2, boolean nervioso3) {
+        if (random.nextDouble() <= 0.05) {
+            nervioso1 = true;
+            System.out.println("El niño 1 ha hecho un ruido en la posición " + getLugar(posNino1) + "!");
+        }
+        if (random.nextDouble() <= 0.05) {
+            nervioso2 = true;
+            System.out.println("El niño 2 ha hecho un ruido en la posición " + getLugar(posNino2) + "!");
+        }
+        if (random.nextDouble() <= 0.05) {
+            nervioso3 = true;
+            System.out.println("El niño 3 ha hecho un ruido en la posición " + getLugar(posNino3) + "!");
+        }
+    }
+
+    private static int[] intercambiarUbicacion(Random random, int posNino1, int posNino2, int posNino3) {
+        int[] posiciones = {posNino1, posNino2, posNino3};
+        if (random.nextDouble() <= 0.3) {
+            int temp = posiciones[0];
+            posiciones[0] = posiciones[1];
+            posiciones[1] = temp;
+            System.out.println("Los niños se han intercambiado de posición sigilosamente.");
+        }
+        return posiciones;
+    }
+
+    private static int buscarNino(int busqueda, Random random, int posNino1, int posNino2, int posNino3) {
+        if (busqueda == posNino1) {
+            return checkBusqueda(random, 1, busqueda, posNino1);
+        } else if (busqueda == posNino2) {
+            return checkBusqueda(random, 2, busqueda, posNino2);
+        } else if (busqueda == posNino3) {
+            return checkBusqueda(random, 3, busqueda, posNino3);
+        } else {
+            System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡No hay nadie!");
+            return 0;
+        }
+    }
+
+    private static int checkBusqueda(Random random, int nino, int busqueda, int posicion) {
+        if (random.nextDouble() > 0.1) {
+            System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡Has encontrado al niño " + nino + "!");
+            return 1;
+        } else {
+            System.out.println("Has mirado en el " + getLugar(busqueda) + "... ¡No hay nadie!");
+            return 0;
+        }
+    }
+
+    private static String getLugar(int index) {
+        switch (index) {
+            case 0: return "Árbol";
+            case 1: return "Banco";
+            case 2: return "Arbusto";
+            case 3: return "Columpio";
+            case 4: return "Caseta";
+            case 5: return "Tobogán";
+            default: return "";
+        }
+    }
+}
 
 ### **1. Organización y Modularidad**
 - **Mi código**: Tiene una estructura modular más detallada, con métodos como `obtenerPosicionAleatoria`, `intercambiarUbicacion`, y `delatarPosicion`, lo que facilita el mantenimiento y la legibilidad. Sin embargo, algunas funciones tienen varias responsabilidades, lo que puede hacerlas más complejas (por ejemplo, `buscarNino` no solo busca, también maneja mensajes y actualiza el estado).
