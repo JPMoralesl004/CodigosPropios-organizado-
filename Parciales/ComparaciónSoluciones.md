@@ -165,6 +165,7 @@ public class IntegralTransformada {
 
 ### Codigo de Masias:
 
+```java
 import java.util.Scanner;
 
 class Escondite {
