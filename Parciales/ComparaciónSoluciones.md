@@ -158,8 +158,6 @@ public class IntegralTransformada {
 
 ### Conclusión
 
-Ambos códigos calculan la integral de manera efectiva, pero utilizan enfoques diferentes:
-
 - **Código de Masias:** Es más directo y simple, pero menos modular y flexible. Utiliza una aproximación fija con `PASO`, lo cual puede ser limitante en términos de precisión ajustable.
 - **Tu código:** Es más modular y flexible, permitiendo al usuario ajustar la precisión de la aproximación a través del número de rectángulos. Además, sigue principios de diseño más limpios y eficaces.
 
