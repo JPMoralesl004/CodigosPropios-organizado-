@@ -1,4 +1,6 @@
-## Comparación de los códigos de la integral transformada
+## Comparacion entre mis respuestas y las de Masias
+
+### Comparación de los códigos de la integral transformada
 
 ### Código del Masias:
 
