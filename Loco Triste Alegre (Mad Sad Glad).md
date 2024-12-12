@@ -25,6 +25,7 @@ La idea del tablero en **Mad Sad Glad** es organizar visualmente las reflexiones
 
 ### 1. **Estructura del tablero**
 - Divide un tablero (puede ser físico, como una pizarra, o digital, como Trello o Miro) en tres columnas:
+  
   - **Loco (Mad):** cosas que frustraron al equipo o generaron enojo. Ejemplo: tareas confusas, bloqueos constantes o procesos innecesarios.
   - **Triste (Sad):** aspectos que hicieron sentir al equipo desmotivado o insatisfecho. Ejemplo: demasiada carga de trabajo o falta de comunicación.
   - **Alegre (Glad):** todo lo que funcionó bien, fue satisfactorio o motivador. Ejemplo: buena colaboración o un objetivo cumplido.
