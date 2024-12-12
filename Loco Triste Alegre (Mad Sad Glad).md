@@ -20,3 +20,29 @@ El método **Mad Sad Glad** es una retrospectiva de Sprint utilizada para explor
 Las retrospectivas pueden ser duras, pero revelan puntos clave para mejorar. También es útil permitir charlas informales que no queden registradas.
 
 ---
+
+La idea del tablero en **Mad Sad Glad** es organizar visualmente las reflexiones del equipo en tres categorías que reflejan emociones o percepciones respecto al Sprint:
+
+### 1. **Estructura del tablero**
+- Divide un tablero (puede ser físico, como una pizarra, o digital, como Trello o Miro) en tres columnas:
+  - **Loco (Mad):** cosas que frustraron al equipo o generaron enojo. Ejemplo: tareas confusas, bloqueos constantes o procesos innecesarios.
+  - **Triste (Sad):** aspectos que hicieron sentir al equipo desmotivado o insatisfecho. Ejemplo: demasiada carga de trabajo o falta de comunicación.
+  - **Alegre (Glad):** todo lo que funcionó bien, fue satisfactorio o motivador. Ejemplo: buena colaboración o un objetivo cumplido.
+
+### 2. **Qué hacer con el equipo**
+- **Coloca notas adhesivas:** Cada miembro escribe en notas adhesivas (físicas o virtuales) sus observaciones y las coloca en la columna que corresponda. 
+  - Usa colores para cada categoría: 
+    - **Verde** para **Alegre**.
+    - **Azul** para **Triste**.
+    - **Naranja** para **Loco**.
+  - Cada persona aporta al menos un elemento por categoría.
+- **Reflexiona:** Una vez todas las notas estén en el tablero, el equipo analiza cada columna:
+  - ¿Por qué algo fue frustrante, triste o positivo?
+  - ¿Cómo puede mejorarse lo que no funcionó?
+  - ¿Cómo se pueden replicar los éxitos?
+
+### 3. **El debate**
+- **Prioriza soluciones:** Para lo **Loco** y lo **Triste**, identifica qué acciones específicas se pueden tomar para mejorar. Por ejemplo:
+  - Cambiar un proceso que todos consideran confuso.
+  - Reducir la cantidad de reuniones que el equipo percibe como innecesarias.
+- **Celebra los logros:** Resalta lo positivo de la columna **Alegre** para mantener la motivación.
