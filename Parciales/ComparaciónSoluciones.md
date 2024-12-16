@@ -103,7 +103,7 @@ public class IntegralTransformada {
   - **Uso de `Scanner`:** Crea múltiples instancias de `Scanner`, lo cual no es necesario y puede ser ineficiente.
 
 - **Mi código:**
-  - **Modularidad:** Tu código es más modular, lo que facilita la lectura y el mantenimiento.
+  - **Modularidad:** Mi código es más modular, lo que facilita la lectura y el mantenimiento.
   - **Interacción del Usuario:** Proporciona mensajes más claros y detallados para la entrada del usuario.
 
 ## Diferencias Detalladas
