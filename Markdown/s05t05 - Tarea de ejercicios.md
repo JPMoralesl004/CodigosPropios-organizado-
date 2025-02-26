@@ -1,41 +1,117 @@
-### Análisis de cada proposición:
+### **1. (p → q) ∧ (q → p)**  
 
-**a)** **(p → q) ∧ (q → p)**  
-   - Esto representa una **bicondicionalidad** (\( p \leftrightarrow q \)), que solo es **verdadera cuando \( p \) y \( q \) tienen el mismo valor de verdad**.  
-   - No es siempre verdadera ni siempre falsa, por lo que es **una contingencia**.
+| p | q | p → q | q → p | (p → q) ∧ (q → p) |
+|---|---|-------|-------|------------------|
+| T | T |   T   |   T   |        T         |
+| T | F |   F   |   T   |        F         |
+| F | T |   T   |   F   |        F         |
+| F | F |   T   |   T   |        T         |
 
-b) \( [p \land (q \lor r)] \rightarrow [(p \land q) \lor (p \land r)] \)  
-   - Usando la distributiva del "y" sobre el "o", el lado derecho se puede reescribir como \( p \land (q \lor r) \), que es exactamente el lado izquierdo.  
-   - Como la implicación \( A \rightarrow A \) siempre es verdadera, **es una tautología**.
+**Clasificación**: **Contingencia**  
 
-c) \( [p \lor \neg q] \rightarrow q \)  
-   - Si \( p = \text{falso} \) y \( q = \text{falso} \), entonces el antecedente es verdadero (\( \neg q = \text{verdadero} \), y \( p \lor \neg q = \text{verdadero} \)), pero el consecuente es falso.  
-   - Como encontramos un caso en el que la proposición es falsa, **es una contingencia**.
+---
 
-d) \( p \rightarrow (p \lor q) \)  
-   - El antecedente es \( p \) y el consecuente es \( p \lor q \). Dado que \( p \lor q \) siempre es verdadero si \( p \) es verdadero, la implicación nunca es falsa.  
-   - **Es una tautología**.
+### **2. [p ∧ (q ∨ r)] → [(p ∧ q) ∨ (p ∧ r)]**  
 
-e) \( (p \land q) \rightarrow p \)  
-   - Si \( p \land q \) es verdadero, necesariamente \( p \) es verdadero.  
-   - La implicación es **siempre verdadera**, por lo que es una **tautología**.
+| p | q | r | q ∨ r | p ∧ (q ∨ r) | p ∧ q | p ∧ r | (p ∧ q) ∨ (p ∧ r) | [p ∧ (q ∨ r)] → [(p ∧ q) ∨ (p ∧ r)] |
+|---|---|---|-------|-------------|-------|-------|------------------|----------------------------------|
+| T | T | T |   T   |      T      |   T   |   T   |        T         |               T                  |
+| T | T | F |   T   |      T      |   T   |   F   |        T         |               T                  |
+| T | F | T |   T   |      T      |   F   |   T   |        T         |               T                  |
+| T | F | F |   F   |      F      |   F   |   F   |        F         |               T                  |
+| F | T | T |   T   |      F      |   F   |   F   |        F         |               T                  |
+| F | T | F |   T   |      F      |   F   |   F   |        F         |               T                  |
+| F | F | T |   T   |      F      |   F   |   F   |        F         |               T                  |
+| F | F | F |   F   |      F      |   F   |   F   |        F         |               T                  |
 
-f) \( [(p \land q) \rightarrow p] \rightarrow (p \land q) \)  
-   - El antecedente \( (p \land q) \rightarrow p \) siempre es verdadero porque si \( p \land q \) es verdadero, \( p \) también lo es.  
-   - Pero el consecuente \( p \land q \) no siempre es verdadero.  
-   - Hay casos donde la proposición es falsa, por lo que es **una contingencia**.
+**Clasificación**: **Tautología**  
 
-g) \( [(p \rightarrow q) \lor (r \rightarrow s)] \rightarrow [(p \lor r) \rightarrow (q \lor s)] \)  
-   - Se puede analizar con una tabla de verdad, pero la estructura de la expresión sugiere que no siempre se cumple.  
-   - Al encontrar contraejemplos donde la proposición es falsa, determinamos que es **una contingencia**.
+---
+
+### **3. (p ∨ ¬q) → q**  
+
+| p | q | ¬q | p ∨ ¬q | (p ∨ ¬q) → q |
+|---|---|----|-------|--------------|
+| T | T |  F |   T   |      T       |
+| T | F |  T |   T   |      F       |
+| F | T |  F |   F   |      T       |
+| F | F |  T |   T   |      F       |
+
+**Clasificación**: **Contingencia**  
+
+---
+
+### **4. p → (p ∨ q)**  
+
+| p | q | p ∨ q | p → (p ∨ q) |
+|---|---|-------|------------|
+| T | T |   T   |     T      |
+| T | F |   T   |     T      |
+| F | T |   T   |     T      |
+| F | F |   F   |     T      |
+
+**Clasificación**: **Tautología**  
+
+---
+
+### **5. (p ∧ q) → p**  
+
+| p | q | p ∧ q | (p ∧ q) → p |
+|---|---|------|-------------|
+| T | T |  T   |      T      |
+| T | F |  F   |      T      |
+| F | T |  F   |      T      |
+| F | F |  F   |      T      |
+
+**Clasificación**: **Tautología**  
+
+---
+
+### **6. (p ∧ q) → (p ∧ q)**  
+
+| p | q | p ∧ q | (p ∧ q) → (p ∧ q) |
+|---|---|------|-------------------|
+| T | T |  T   |         T         |
+| T | F |  F   |         T         |
+| F | T |  F   |         T         |
+| F | F |  F   |         T         |
+
+**Clasificación**: **Tautología**  
+
+---
+
+### **7. [(p → q) ∨ (r → s)] → [(p ∨ r) → (q ∨ s)]**  
+
+| p | q | r | s | p → q | r → s | (p → q) ∨ (r → s) | p ∨ r | q ∨ s | (p ∨ r) → (q ∨ s) | [(p → q) ∨ (r → s)] → [(p ∨ r) → (q ∨ s)] |
+|---|---|---|---|-------|-------|------------------|-------|-------|------------------|----------------------------------|
+| T | T | T | T |   T   |   T   |        T         |   T   |   T   |        T         |               T                  |
+| T | T | T | F |   T   |   F   |        T         |   T   |   T   |        T         |               T                  |
+| T | T | F | T |   T   |   T   |        T         |   T   |   T   |        T         |               T                  |
+| T | T | F | F |   T   |   T   |        T         |   T   |   T   |        T         |               T                  |
+| T | F | T | T |   F   |   T   |        T         |   T   |   T   |        T         |               T                  |
+| T | F | T | F |   F   |   F   |        F         |   T   |   F   |        F         |               F                  |
+| T | F | F | T |   F   |   T   |        T         |   T   |   T   |        T         |               T                  |
+| T | F | F | F |   F   |   T   |        T         |   T   |   F   |        F         |               F                  |
+| F | T | T | T |   T   |   T   |        T         |   T   |   T   |        T         |               T                  |
+| F | T | T | F |   T   |   F   |        T         |   T   |   T   |        T         |               T                  |
+| F | T | F | T |   T   |   T   |        T         |   F   |   T   |        T         |               T                  |
+| F | T | F | F |   T   |   T   |        T         |   F   |   T   |        T         |               T                  |
+| F | F | T | T |   T   |   T   |        T         |   T   |   T   |        T         |               T                  |
+| F | F | T | F |   T   |   F   |        T         |   T   |   F   |        F         |               F                  |
+| F | F | F | T |   T   |   T   |        T         |   F   |   T   |        T         |               T                  |
+| F | F | F | F |   T   |   T   |        T         |   F   |   F   |        T         |               T                  |
+
+**Clasificación**: **Contingencia**  
+
+---
 
 ### Resumen de los resultados:
 | Proposición | Clasificación |
 |-------------|--------------|
-| a) \( (p \rightarrow q) \land (q \rightarrow p) \) | Contingencia |
-| b) \( [p \land (q \lor r)] \rightarrow [(p \land q) \lor (p \land r)] \) | Tautología |
-| c) \( [p \lor \neg q] \rightarrow q \) | Contingencia |
-| d) \( p \rightarrow (p \lor q) \) | Tautología |
-| e) \( (p \land q) \rightarrow p \) | Tautología |
-| f) \( [(p \land q) \rightarrow p] \rightarrow (p \land q) \) | Contingencia |
-| g) \( [(p \rightarrow q) \lor (r \rightarrow s)] \rightarrow [(p \lor r) \rightarrow (q \lor s)] \) | Contingencia |
+| a) (p → q) ∧ (q → p)) | Contingencia |
+| b) [p ∧ (q ∨ r)] → [(p ∧ q) ∨ (p ∧ r)] | Tautología |
+| c) (p ∨ ¬q) → q | Contingencia |
+| d) p → (p ∨ q) | Tautología |
+| e) (p ∧ q) → p  | Tautología |
+| f) (p ∧ q) → (p ∧ q) | Tautología |
+| g) [(p → q) ∨ (r → s)] → [(p ∨ r) → (q ∨ s)] | Contingencia |
